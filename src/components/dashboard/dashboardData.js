@@ -23,14 +23,14 @@ export const sidebarItems = [
   { label: "Accounting", href: "/dashboard/accounting", icon: ReceiptText },
   { label: "Reports", href: "/dashboard/reports", icon: BarChart3 },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
-  { label: "Logout", href: "/login", icon: LogOut, action: "logout" },
+  { label: "Logout", href: "/dashboard/logout", icon: LogOut, action: "logout" },
 ];
 
 export const dashboardStats = [
   { label: "Total Leads", value: "1,284", change: "+18.2%", tone: "green", helper: "142 new this week" },
   { label: "Pending Applications", value: "326", change: "+42", tone: "orange", helper: "Needs admissions review" },
   { label: "Converted Students", value: "642", change: "+12.4%", tone: "green", helper: "Across all programs" },
-  { label: "Monthly Revenue", value: "₹18.4L", change: "+24.1%", tone: "green", helper: "Collected and confirmed" },
+  { label: "Monthly Revenue", value: "Rs 18.4L", change: "+24.1%", tone: "green", helper: "Collected and confirmed" },
 ];
 
 export const recentLeads = [
@@ -55,10 +55,10 @@ export const reminders = [
 ];
 
 export const activity = [
-  { title: "Bulk approved 28 applications", meta: "Admissions · 12 min ago" },
-  { title: "Invoice INV-2049 marked paid", meta: "Accounts · 38 min ago" },
-  { title: "New lead assigned to Nisha", meta: "Sales · 1 hr ago" },
-  { title: "HR candidate moved to offer", meta: "Hiring · 2 hrs ago" },
+  { title: "Bulk approved 28 applications", meta: "Admissions - 12 min ago" },
+  { title: "Invoice INV-2049 marked paid", meta: "Accounts - 38 min ago" },
+  { title: "New lead assigned to Nisha", meta: "Sales - 1 hr ago" },
+  { title: "HR candidate moved to offer", meta: "Hiring - 2 hrs ago" },
 ];
 
 export const revenueBars = [46, 62, 54, 74, 69, 88, 92, 84];

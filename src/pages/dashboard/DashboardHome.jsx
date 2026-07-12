@@ -88,10 +88,10 @@ export default function DashboardHome() {
   const visibleStats = useMemo(() => {
     if (invoiceStats) {
       return [
-        { label: "Monthly Revenue", value: `₹${Math.round(invoiceStats.collectedAmount || 0).toLocaleString("en-IN")}`, change: "Live", tone: "green", helper: "Collected invoice payments" },
+        { label: "Monthly Revenue", value: `Rs ${Math.round(invoiceStats.collectedAmount || 0).toLocaleString("en-IN")}`, change: "Live", tone: "green", helper: "Collected invoice payments" },
         { label: "Pending Invoices", value: String(invoiceStats.pendingInvoices || 0), change: "Open", tone: "orange", helper: "Pending or partially paid" },
-        { label: "Total Revenue", value: `₹${Math.round(invoiceStats.totalRevenue || 0).toLocaleString("en-IN")}`, change: "Live", tone: "green", helper: "Total invoice value" },
-        { label: "Overdue Amount", value: `₹${Math.round(invoiceStats.overdueAmount || 0).toLocaleString("en-IN")}`, change: "Due", tone: "orange", helper: "Past due and unpaid" },
+        { label: "Total Revenue", value: `Rs ${Math.round(invoiceStats.totalRevenue || 0).toLocaleString("en-IN")}`, change: "Live", tone: "green", helper: "Total invoice value" },
+        { label: "Overdue Amount", value: `Rs ${Math.round(invoiceStats.overdueAmount || 0).toLocaleString("en-IN")}`, change: "Due", tone: "orange", helper: "Past due and unpaid" },
       ];
     }
 
