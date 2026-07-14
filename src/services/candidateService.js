@@ -1,22 +1,9 @@
+import { apiRequest } from "./apiClient.js";
+
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL || ""}/api/candidates`;
 
 async function request(path = "", options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      "x-demo-user": "demo-admin",
-      ...(options.headers || {}),
-    },
-    ...options,
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || "Candidate API request failed");
-  }
-
-  return data;
+  return apiRequest(API_BASE, path, options, "Candidate API request failed");
 }
 
 export function getCandidates(filters = {}) {

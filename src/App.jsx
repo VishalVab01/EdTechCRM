@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import DashboardHome from "./pages/dashboard/DashboardHome.jsx";
@@ -11,33 +12,55 @@ import Logout from "./pages/dashboard/Logout.jsx";
 import Reports from "./pages/dashboard/Reports.jsx";
 import SalesLeads from "./pages/dashboard/SalesLeads.jsx";
 import Settings from "./pages/dashboard/Settings.jsx";
+import { getStoredToken } from "./services/apiClient.js";
+import { login } from "./services/authService.js";
 
 function LoginPlaceholder() {
   const navigate = useNavigate();
+  const [form, setForm] = useState({ email: "admin@edtechcrm.local", password: "Admin123!" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const enterDemo = () => {
-    localStorage.setItem("edtech_crm_demo_auth", "true");
-    navigate("/dashboard");
+  const submit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      await login(form.email, form.password);
+      navigate("/dashboard");
+    } catch (apiError) {
+      setError(apiError.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <main className="grid min-h-screen place-items-center bg-cloud px-6 text-center">
-      <div className="max-w-md rounded-[8px] border border-line bg-white p-8 shadow-card">
+      <form onSubmit={submit} className="w-full max-w-md rounded-[8px] border border-line bg-white p-8 text-left shadow-card">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted">CRM access</p>
         <h1 className="mt-3 text-3xl font-bold text-ink">EdTech CRM Login</h1>
-        <p className="mt-3 text-muted">
-          Demo auth is local only for now. Continue to enter the protected CRM workspace.
-        </p>
-        <button onClick={enterDemo} className="mt-6 w-full rounded-full bg-ink px-5 py-3 text-sm font-bold text-white hover:bg-pine">
-          Continue to Dashboard
+        <p className="mt-3 text-muted">Sign in with your CRM account to enter the protected workspace.</p>
+        {error && <p className="mt-4 rounded-[8px] bg-rose-50 px-4 py-3 text-sm font-bold text-rose-700">{error}</p>}
+        <label className="mt-5 block text-sm font-bold text-ink">
+          Email
+          <input type="email" className="mt-2 w-full rounded-[8px] border border-line bg-cloud px-4 py-3 outline-none focus:border-pine" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} />
+        </label>
+        <label className="mt-4 block text-sm font-bold text-ink">
+          Password
+          <input type="password" className="mt-2 w-full rounded-[8px] border border-line bg-cloud px-4 py-3 outline-none focus:border-pine" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} />
+        </label>
+        <button disabled={loading} className="mt-6 w-full rounded-full bg-ink px-5 py-3 text-sm font-bold text-white hover:bg-pine disabled:cursor-not-allowed disabled:opacity-60">
+          {loading ? "Signing in..." : "Sign in to Dashboard"}
         </button>
-      </div>
+        <p className="mt-4 text-center text-xs text-muted">Default first-run admin: admin@edtechcrm.local / Admin123!</p>
+      </form>
     </main>
   );
 }
 
 function ProtectedDashboardRoute() {
-  const isAuthed = localStorage.getItem("edtech_crm_demo_auth") === "true";
+  const isAuthed = Boolean(getStoredToken());
   return isAuthed ? <DashboardLayout /> : <Navigate to="/login" replace />;
 }
 

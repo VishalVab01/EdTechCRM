@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { logout } from "../../services/authService.js";
 
 export default function Logout() {
   useEffect(() => {
-    localStorage.removeItem("edtech_crm_demo_auth");
+    logout();
   }, []);
 
   return <Navigate to="/login" replace />;

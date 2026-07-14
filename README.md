@@ -12,7 +12,7 @@ The frontend is built with React, Vite, Tailwind CSS, Lucide icons, and React Ro
 
 ### Protected CRM Dashboard
 
-- Protected `/dashboard` route using demo local auth
+- Protected `/dashboard` route using JWT authentication
 - Sidebar navigation
 - Top navbar with global search UI
 - User role badge
@@ -32,8 +32,8 @@ The frontend is built with React, Vite, Tailwind CSS, Lucide icons, and React Ro
 - Billing: invoice creation, payment tracking, payment status, and revenue summary.
 - Accounting: invoice-backed ledger, recognized revenue, receivables, discounts, and tax overview.
 - Reports: live cross-module reporting across leads, applications, HR, and billing.
-- Settings: demo-local workspace preferences, notification toggles, role access matrix, and MVP readiness checklist.
-- Logout: clears demo auth and redirects to login.
+- Settings: database-backed workspace preferences, notification toggles, user creation, role access matrix, and MVP readiness checklist.
+- Logout: clears the JWT session and redirects to login.
 
 ## Tech Stack
 
@@ -138,6 +138,12 @@ Then update `backend/.env`:
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/edtech-crm
 CLIENT_ORIGIN=http://127.0.0.1:5173
+JWT_SECRET=replace-with-a-long-random-secret
+JWT_EXPIRES_IN=8h
+ADMIN_NAME=Vishal Admin
+ADMIN_EMAIL=admin@edtechcrm.local
+ADMIN_PASSWORD=Admin123!
+RATE_LIMIT_MAX=600
 ```
 
 Use your own MongoDB URI for `MONGO_URI`. Do not commit `backend/.env`; it is intentionally ignored by Git.
@@ -180,16 +186,31 @@ Preview the production build:
 npm run preview
 ```
 
-## Demo Login
+## Authentication
 
-Authentication is currently demo-local only.
+Authentication uses JWT tokens issued by the backend.
 
 1. Open `http://127.0.0.1:5173/login`.
-2. Click `Continue to Dashboard`.
-3. The app stores `edtech_crm_demo_auth=true` in local storage.
+2. Sign in with a CRM user email and password.
+3. The frontend stores the JWT token in local storage and sends it with API requests.
 4. Open `/dashboard` or any dashboard module route.
 
-Logout clears the demo auth flag and redirects to `/login`.
+On first backend startup, a default Super Admin is created if no users exist:
+
+```text
+Email: admin@edtechcrm.local
+Password: Admin123!
+```
+
+Change these values in `backend/.env` before production use. Logout clears the local JWT session and redirects to `/login`.
+
+## Seed Data
+
+Seed an admin user and sample CRM records:
+
+```bash
+npm run seed --prefix backend
+```
 
 ## Frontend Routes
 
@@ -210,7 +231,7 @@ Logout clears the demo auth flag and redirects to `/login`.
 
 ## API Endpoints
 
-All module APIs use the `/api` prefix. Database-backed routes use the `requireDatabase` middleware.
+All module APIs use the `/api` prefix. CRM routes use database and JWT auth middleware.
 
 ### Health
 
@@ -229,6 +250,33 @@ PUT    /api/leads/:id
 DELETE /api/leads/:id
 PATCH  /api/leads/:id/status
 PATCH  /api/leads/:id/notes
+```
+
+### Auth and Users
+
+```text
+POST   /api/auth/login
+GET    /api/auth/me
+GET    /api/auth/users
+POST   /api/auth/users
+PUT    /api/auth/users/:id
+```
+
+User management routes require the `Super Admin` role.
+
+### Settings
+
+```text
+GET    /api/settings
+PUT    /api/settings
+```
+
+Updating workspace settings requires the `Super Admin` role.
+
+### Global Search
+
+```text
+GET /api/search?search=query
 ```
 
 Supported lead filters include:
@@ -331,8 +379,8 @@ These models support the dashboard modules and reporting views.
 - Vite proxies `/api` requests to `http://127.0.0.1:5000`.
 - Frontend services live in `src/services`.
 - Backend controllers, models, and routes follow a module-per-domain structure.
-- The dashboard is currently protected by demo local storage auth only.
-- Production authentication and role-based authorization are future work.
+- Dashboard and APIs are protected by JWT authentication.
+- Destructive/admin actions use basic role checks.
 - `backend/.env` is ignored and must not be committed.
 
 ## Testing Checklist
@@ -340,6 +388,7 @@ These models support the dashboard modules and reporting views.
 After making changes, run:
 
 ```bash
+npm run test --prefix backend
 npm run build
 ```
 
@@ -353,13 +402,13 @@ Verify:
 
 - Root route `/` redirects into the CRM dashboard flow.
 - Login page loads at `/login`.
-- Dashboard opens after clicking `Continue to Dashboard`.
+- Dashboard opens after signing in with a valid CRM user.
 - Sales Leads can create, edit, filter, and delete leads.
 - Applications and Bulk Review flows load.
 - HR candidate tracking loads.
 - Billing can create invoices and record payments.
 - Accounting and Reports show live module data.
-- Settings save local workspace preferences.
+- Settings save workspace preferences to MongoDB.
 - Backend health check returns `{"status":"ok"}`.
 
 ## Troubleshooting
@@ -374,7 +423,7 @@ Confirm the backend is running on port `5000` and Vite proxy is active.
 
 ### Dashboard Redirects to Login
 
-Open `/login` and click `Continue to Dashboard` to set demo auth.
+Open `/login` and sign in with a valid CRM user. If this is a fresh database, run the seed command or use the default first-run admin.
 
 ### Port Already in Use
 
@@ -397,9 +446,6 @@ Do not commit:
 
 ## Roadmap
 
-- Replace demo auth with real authentication.
-- Add role-based access control.
-- Add automated tests.
 - Add export functionality for accounting and reports.
 - Add production deployment configuration.
 - Add activity audit logs.

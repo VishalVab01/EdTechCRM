@@ -18,7 +18,7 @@ function normalizeApplicationPayload(body) {
 }
 
 function getReviewer(req) {
-  return req.user?._id || req.user?.id || req.headers["x-demo-user"] || null;
+  return req.user?._id || req.user?.id || null;
 }
 
 function isValidObjectId(id) {

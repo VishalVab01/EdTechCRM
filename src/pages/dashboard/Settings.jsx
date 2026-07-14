@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { BellRing, Building2, CheckCircle2, Lock, Save, UsersRound } from "lucide-react";
+import { createUser, getUsers } from "../../services/authService.js";
+import { getWorkspaceSettings, updateWorkspaceSettings } from "../../services/settingsService.js";
 
 const defaultSettings = {
   instituteName: "EdTech CRM Workspace",
@@ -22,26 +24,59 @@ const accessRows = [
 
 export default function Settings() {
   const [settings, setSettings] = useState(defaultSettings);
+  const [users, setUsers] = useState([]);
+  const [userForm, setUserForm] = useState({ name: "", email: "", password: "", role: "Counsellor" });
   const [toast, setToast] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem("edtech_crm_settings");
-    if (saved) {
-      try {
-        setSettings({ ...defaultSettings, ...JSON.parse(saved) });
-      } catch {
-        setSettings(defaultSettings);
-      }
-    }
+    loadSettings();
   }, []);
 
   const update = (field, value) => setSettings((current) => ({ ...current, [field]: value }));
 
-  const saveSettings = (event) => {
-    event.preventDefault();
-    localStorage.setItem("edtech_crm_settings", JSON.stringify(settings));
-    setToast("Workspace settings saved.");
+  const showToast = (message) => {
+    setToast(message);
     window.setTimeout(() => setToast(""), 2600);
+  };
+
+  const loadSettings = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const [settingsData, usersData] = await Promise.all([getWorkspaceSettings(), getUsers().catch(() => ({ users: [] }))]);
+      setSettings({ ...defaultSettings, ...(settingsData.settings || {}) });
+      setUsers(usersData.users || []);
+    } catch (apiError) {
+      setError(apiError.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveSettings = async (event) => {
+    event.preventDefault();
+    try {
+      const data = await updateWorkspaceSettings(settings);
+      setSettings({ ...defaultSettings, ...(data.settings || {}) });
+      showToast("Workspace settings saved.");
+    } catch (apiError) {
+      setError(apiError.message);
+    }
+  };
+
+  const addUser = async (event) => {
+    event.preventDefault();
+    setError("");
+    try {
+      await createUser(userForm);
+      setUserForm({ name: "", email: "", password: "", role: "Counsellor" });
+      showToast("Team member created.");
+      await loadSettings();
+    } catch (apiError) {
+      setError(apiError.message);
+    }
   };
 
   return (
@@ -52,10 +87,12 @@ export default function Settings() {
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">Workspace Settings</h1>
           <p className="mt-2 text-muted">Configure CRM defaults, notifications, and role access for the MVP workspace.</p>
         </div>
-        <div className="rounded-full border border-line bg-white px-4 py-2 text-sm font-black text-pine shadow-card">Demo-local settings</div>
+        <div className="rounded-full border border-line bg-white px-4 py-2 text-sm font-black text-pine shadow-card">Database-backed settings</div>
       </div>
 
       {toast && <p className="mt-5 rounded-[8px] border border-line bg-mint px-4 py-3 text-sm font-bold text-pine shadow-card">{toast}</p>}
+      {error && <p className="mt-5 rounded-[8px] border border-rose-100 bg-rose-50 px-4 py-3 text-sm font-bold text-rose-700">{error}</p>}
+      {loading && <p className="mt-5 rounded-[8px] border border-line bg-white px-4 py-3 text-sm font-bold text-muted shadow-card">Loading workspace settings...</p>}
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_0.85fr]">
         <form onSubmit={saveSettings} className="rounded-[8px] border border-line bg-white p-5 shadow-card">
@@ -126,6 +163,42 @@ export default function Settings() {
         </form>
 
         <div className="space-y-6">
+          <section className="rounded-[8px] border border-line bg-white p-5 shadow-card">
+            <div className="flex items-center gap-3">
+              <span className="grid h-11 w-11 place-items-center rounded-[8px] bg-mint text-pine">
+                <UsersRound className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-lg font-black text-ink">Team Members</h2>
+                <p className="text-sm text-muted">Create users for role-based CRM access.</p>
+              </div>
+            </div>
+            <form onSubmit={addUser} className="mt-5 grid gap-3">
+              <input className="rounded-[8px] border border-line bg-cloud px-4 py-3 text-sm outline-none focus:border-pine" placeholder="Name" value={userForm.name} onChange={(event) => setUserForm((current) => ({ ...current, name: event.target.value }))} />
+              <input type="email" className="rounded-[8px] border border-line bg-cloud px-4 py-3 text-sm outline-none focus:border-pine" placeholder="Email" value={userForm.email} onChange={(event) => setUserForm((current) => ({ ...current, email: event.target.value }))} />
+              <input type="password" className="rounded-[8px] border border-line bg-cloud px-4 py-3 text-sm outline-none focus:border-pine" placeholder="Temporary password" value={userForm.password} onChange={(event) => setUserForm((current) => ({ ...current, password: event.target.value }))} />
+              <select className="rounded-[8px] border border-line bg-cloud px-4 py-3 text-sm font-semibold outline-none focus:border-pine" value={userForm.role} onChange={(event) => setUserForm((current) => ({ ...current, role: event.target.value }))}>
+                {accessRows.map(([role]) => <option key={role}>{role}</option>)}
+              </select>
+              <button className="rounded-full bg-ink px-5 py-3 text-sm font-bold text-white hover:bg-pine">Create User</button>
+            </form>
+            <div className="mt-5 space-y-2">
+              {users.length === 0 ? (
+                <p className="rounded-[8px] bg-cloud p-3 text-sm font-semibold text-muted">Only Super Admin can view team members.</p>
+              ) : (
+                users.map((user) => (
+                  <div key={user._id || user.id} className="flex items-center justify-between gap-3 rounded-[8px] bg-cloud p-3">
+                    <div>
+                      <p className="text-sm font-black text-ink">{user.name}</p>
+                      <p className="text-xs text-muted">{user.email}</p>
+                    </div>
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-coral">{user.role}</span>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+
           <section className="rounded-[8px] border border-line bg-white p-5 shadow-card">
             <div className="flex items-center gap-3">
               <span className="grid h-11 w-11 place-items-center rounded-[8px] bg-cloud text-ink">

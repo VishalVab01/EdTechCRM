@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Invoice, { PAYMENT_METHODS, PAYMENT_STATUSES } from "../models/Invoice.js";
 
 function getCreatedBy(req) {
-  return req.user?._id || req.user?.id || req.headers["x-demo-user"] || null;
+  return req.user?._id || req.user?.id || null;
 }
 
 function isValidObjectId(id) {

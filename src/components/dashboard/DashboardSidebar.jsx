@@ -1,12 +1,13 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { sidebarItems } from "./dashboardData.js";
+import { logout } from "../../services/authService.js";
 
 export default function DashboardSidebar({ open, onClose }) {
   const navigate = useNavigate();
 
   const handleItem = (item) => {
     if (item.action === "logout") {
-      localStorage.removeItem("edtech_crm_demo_auth");
+      logout();
       navigate("/login");
     }
     onClose?.();

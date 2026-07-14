@@ -7,6 +7,8 @@
     "dev": "concurrently -k -n frontend,backend \"npm:dev:frontend\" \"npm:dev:backend\"",
     "dev:frontend": "vite --host 127.0.0.1",
     "dev:backend": "npm run dev --prefix backend",
+    "seed": "npm run seed --prefix backend",
+    "test": "npm run test --prefix backend",
     "build": "vite build",
     "preview": "vite preview"
   },
