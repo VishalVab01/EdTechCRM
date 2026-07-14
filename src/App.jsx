@@ -1,13 +1,4 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import Home from "./pages/landing/Home.jsx";
-import About from "./pages/landing/About.jsx";
-import Blog from "./pages/landing/Blog.jsx";
-import BlogDetail from "./pages/landing/BlogDetail.jsx";
-import Careers from "./pages/landing/Careers.jsx";
-import Contact from "./pages/landing/Contact.jsx";
-import Privacy from "./pages/landing/Privacy.jsx";
-import Terms from "./pages/landing/Terms.jsx";
-import NotFound from "./pages/landing/NotFound.jsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import DashboardHome from "./pages/dashboard/DashboardHome.jsx";
 import DashboardModule from "./pages/dashboard/DashboardModule.jsx";
@@ -32,10 +23,10 @@ function LoginPlaceholder() {
   return (
     <main className="grid min-h-screen place-items-center bg-cloud px-6 text-center">
       <div className="max-w-md rounded-[8px] border border-line bg-white p-8 shadow-card">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted">Auth route</p>
-        <h1 className="mt-3 text-3xl font-bold text-ink">Login remains separate</h1>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted">CRM access</p>
+        <h1 className="mt-3 text-3xl font-bold text-ink">EdTech CRM Login</h1>
         <p className="mt-3 text-muted">
-          Demo auth is local only for now. Backend authentication can plug into this route later.
+          Demo auth is local only for now. Continue to enter the protected CRM workspace.
         </p>
         <button onClick={enterDemo} className="mt-6 w-full rounded-full bg-ink px-5 py-3 text-sm font-bold text-white hover:bg-pine">
           Continue to Dashboard
@@ -53,14 +44,7 @@ function ProtectedDashboardRoute() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/blog/:slug" element={<BlogDetail />} />
-      <Route path="/careers" element={<Careers />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route path="/terms" element={<Terms />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/login" element={<LoginPlaceholder />} />
       <Route path="/dashboard" element={<ProtectedDashboardRoute />}>
         <Route index element={<DashboardHome />} />
@@ -75,7 +59,7 @@ export default function App() {
         <Route path="logout" element={<Logout />} />
         <Route path=":module" element={<DashboardModule />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }

@@ -1,27 +1,14 @@
 ﻿# EdTech CRM
 
-A MERN-style EdTech CRM MVP with a public marketing website, protected SaaS dashboard, and working CRM modules for sales leads, student applications, HR candidates, billing, accounting, reports, and workspace settings.
+A MERN-style EdTech CRM MVP with a protected SaaS dashboard and working CRM modules for sales leads, student applications, HR candidates, billing, accounting, reports, and workspace settings.
 
 ## Overview
 
-This project is split into two experiences:
+This project is now CRM-only. The root route sends users into the protected CRM workspace for sales, admissions, HR, billing, accounting, and reporting workflows.
 
-- Public website: landing pages for prospects and marketing content.
-- Protected CRM workspace: internal dashboard for sales, admissions, HR, billing, accounting, and reporting workflows.
-
-The frontend is built with React, Vite, Tailwind CSS, Framer Motion, Lucide icons, and React Router. The backend is built with Express, MongoDB, and Mongoose.
+The frontend is built with React, Vite, Tailwind CSS, Lucide icons, and React Router. The backend is built with Express, MongoDB, and Mongoose.
 
 ## Current Features
-
-### Public Website
-
-- Landing page
-- About page
-- Blog list and blog detail pages
-- Careers page
-- Contact page
-- Privacy and terms pages
-- Not found page
 
 ### Protected CRM Dashboard
 
@@ -56,7 +43,6 @@ The frontend is built with React, Vite, Tailwind CSS, Framer Motion, Lucide icon
 - Vite 6
 - React Router 7
 - Tailwind CSS 3
-- Framer Motion
 - Lucide React
 
 ### Backend
@@ -99,10 +85,8 @@ The frontend is built with React, Vite, Tailwind CSS, Framer Motion, Lucide icon
 |-- src
 |   |-- components
 |   |   |-- dashboard
-|   |   `-- landing
 |   |-- pages
 |   |   |-- dashboard
-|   |   `-- landing
 |   |-- services
 |   |-- App.jsx
 |   |-- main.jsx
@@ -209,20 +193,10 @@ Logout clears the demo auth flag and redirects to `/login`.
 
 ## Frontend Routes
 
-### Public Routes
+### CRM Routes
 
 - `/`
-- `/about`
-- `/blog`
-- `/blog/:slug`
-- `/careers`
-- `/contact`
-- `/privacy`
-- `/terms`
 - `/login`
-
-### Dashboard Routes
-
 - `/dashboard`
 - `/dashboard/sales-leads`
 - `/dashboard/applications`
@@ -353,7 +327,7 @@ These models support the dashboard modules and reporting views.
 
 ## Development Notes
 
-- The public landing website and protected CRM dashboard are intentionally separate.
+- The public landing website has been removed; the app is CRM-only.
 - Vite proxies `/api` requests to `http://127.0.0.1:5000`.
 - Frontend services live in `src/services`.
 - Backend controllers, models, and routes follow a module-per-domain structure.
@@ -377,7 +351,7 @@ npm run dev
 
 Verify:
 
-- Public landing page loads at `/`.
+- Root route `/` redirects into the CRM dashboard flow.
 - Login page loads at `/login`.
 - Dashboard opens after clicking `Continue to Dashboard`.
 - Sales Leads can create, edit, filter, and delete leads.

@@ -155,7 +155,7 @@ export default function Settings() {
               <h2 className="text-lg font-black text-ink">MVP Readiness</h2>
             </div>
             <div className="mt-4 grid gap-3">
-              {["Landing page separated from CRM", "Protected dashboard route", "Sales, Applications, HR, Billing connected", "Accounting, Reports, Settings shell completed"].map((item) => (
+              {["CRM-only app routing", "Protected dashboard route", "Sales, Applications, HR, Billing connected", "Accounting, Reports, Settings shell completed"].map((item) => (
                 <p key={item} className="rounded-[8px] bg-mint px-4 py-3 text-sm font-bold text-pine">{item}</p>
               ))}
             </div>

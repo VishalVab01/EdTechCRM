@@ -38,7 +38,7 @@ export const recentLeads = [
   { name: "Rahul Verma", course: "Full Stack", source: "Google Ads", owner: "Kabir", stage: "Follow-up", score: 78 },
   { name: "Fatima Khan", course: "UI/UX Design", source: "Referral", owner: "Meera", stage: "Application", score: 88 },
   { name: "Vikram Singh", course: "Cloud Computing", source: "Instagram", owner: "Aarav", stage: "New Lead", score: 64 },
-  { name: "Diya Nair", course: "Product Management", source: "Landing Page", owner: "Nisha", stage: "Converted", score: 95 },
+  { name: "Diya Nair", course: "Product Management", source: "Website", owner: "Nisha", stage: "Converted", score: 95 },
 ];
 
 export const applicationQueue = [

@@ -31,23 +31,3 @@ input,
 textarea {
   font: inherit;
 }
-
-.landing-shell {
-  width: min(1180px, calc(100% - 32px));
-  margin-inline: auto;
-}
-
-.section-pad {
-  padding-block: clamp(64px, 8vw, 112px);
-}
-
-.glass-card {
-  border: 1px solid rgba(231, 232, 227, 0.9);
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: 0 14px 36px rgba(23, 32, 51, 0.07);
-  backdrop-filter: blur(18px);
-}
-
-.mini-bar {
-  background: linear-gradient(90deg, #17463a, #70c17b);
-}
