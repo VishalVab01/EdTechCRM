@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { fileURLToPath } from "node:url";
 import { connectDB } from "./config/db.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -13,7 +14,7 @@ import searchRoutes from "./routes/searchRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import { ensureDefaultAdmin } from "./utils/ensureDefaultAdmin.js";
 
-dotenv.config();
+dotenv.config({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
 
 const app = express();
 const port = process.env.PORT || 5000;

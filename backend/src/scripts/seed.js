@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { fileURLToPath } from "node:url";
 import { connectDB } from "../config/db.js";
 import Application from "../models/Application.js";
 import Candidate from "../models/Candidate.js";
@@ -7,7 +8,7 @@ import Lead from "../models/Lead.js";
 import User from "../models/User.js";
 import WorkspaceSettings from "../models/WorkspaceSettings.js";
 
-dotenv.config();
+dotenv.config({ path: fileURLToPath(new URL("../../.env", import.meta.url)) });
 
 await connectDB();
 
@@ -33,17 +34,25 @@ await WorkspaceSettings.findOneAndUpdate(
 );
 
 if ((await Lead.countDocuments()) === 0) {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 6);
   await Lead.insertMany([
-    { name: "Anika Sharma", email: "anika@example.com", phone: "9876543210", courseInterested: "Data Analytics", source: "Website", status: "Demo Scheduled", assignedCounselor: "Nisha", createdBy: admin._id },
-    { name: "Rahul Verma", email: "rahul@example.com", phone: "9876543211", courseInterested: "Full Stack", source: "Google Ads", status: "Contacted", assignedCounselor: "Kabir", createdBy: admin._id },
-    { name: "Diya Nair", email: "diya@example.com", phone: "9876543212", courseInterested: "Product Management", source: "Referral", status: "Converted", assignedCounselor: "Nisha", createdBy: admin._id },
+    { name: "Anika Sharma", email: "anika@example.com", phone: "9876543210", courseInterested: "Data Analytics", source: "Website", status: "Demo Scheduled", assignedCounselor: "Nisha", followUpDate: tomorrow, notes: "Booked demo after webinar enquiry.", createdBy: admin._id },
+    { name: "Rahul Verma", email: "rahul@example.com", phone: "9876543211", courseInterested: "Full Stack", source: "Google Ads", status: "Contacted", assignedCounselor: "Kabir", followUpDate: nextWeek, notes: "Asked for EMI and weekend batch details.", createdBy: admin._id },
+    { name: "Fatima Khan", email: "fatima@example.com", phone: "9876543213", courseInterested: "UI/UX Design", source: "Referral", status: "New", assignedCounselor: "Meera", notes: "Referral from alumni network.", createdBy: admin._id },
+    { name: "Vikram Singh", email: "vikram@example.com", phone: "9876543214", courseInterested: "Cloud Computing", source: "Instagram", status: "Contacted", assignedCounselor: "Aarav", notes: "Interested in placement support.", createdBy: admin._id },
+    { name: "Diya Nair", email: "diya@example.com", phone: "9876543212", courseInterested: "Product Management", source: "Referral", status: "Converted", assignedCounselor: "Nisha", notes: "Converted after counselling call.", createdBy: admin._id },
   ]);
 }
 
 if ((await Application.countDocuments()) === 0) {
   await Application.insertMany([
-    { studentName: "Priyansh Jain", email: "priyansh@example.com", phone: "9876500001", course: "MERN Career Track", city: "Bengaluru", status: "Under Review", assignedReviewer: "Meera" },
-    { studentName: "Sara Thomas", email: "sara@example.com", phone: "9876500002", course: "Data Science", city: "Mumbai", status: "Pending", assignedReviewer: "Aarav" },
+    { studentName: "Priyansh Jain", email: "priyansh@example.com", phone: "9876500001", course: "MERN Career Track", city: "Bengaluru", status: "Under Review", assignedReviewer: "Meera", remarks: "Docs verified" },
+    { studentName: "Sara Thomas", email: "sara@example.com", phone: "9876500002", course: "Data Science", city: "Mumbai", status: "Pending", assignedReviewer: "Aarav", remarks: "Payment pending" },
+    { studentName: "Mohit Bansal", email: "mohit@example.com", phone: "9876500003", course: "Digital Marketing", city: "Delhi", status: "On Hold", assignedReviewer: "Meera", remarks: "Needs transcript" },
+    { studentName: "Leena Das", email: "leena@example.com", phone: "9876500004", course: "Cybersecurity", city: "Kolkata", status: "Under Review", assignedReviewer: "Aarav", remarks: "Counsellor note added" },
   ]);
 }
 

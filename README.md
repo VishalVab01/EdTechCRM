@@ -212,6 +212,8 @@ Seed an admin user and sample CRM records:
 npm run seed
 ```
 
+The seeded records are sample evaluation data for HR/demo review. Dashboard widgets and module pages read from MongoDB, so seeded records can be edited, deleted, or replaced with real institute data.
+
 ## Frontend Routes
 
 ### CRM Routes
