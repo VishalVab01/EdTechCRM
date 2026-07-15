@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BellRing, Building2, CheckCircle2, Lock, Save, UsersRound } from "lucide-react";
+import { BellRing, Building2, Lock, Save, UsersRound } from "lucide-react";
 import { createUser, getUsers } from "../../services/authService.js";
 import { getWorkspaceSettings, updateWorkspaceSettings } from "../../services/settingsService.js";
 
@@ -218,18 +218,6 @@ export default function Settings() {
                   </div>
                   <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="rounded-[8px] border border-line bg-white p-5 shadow-card">
-            <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-5 w-5 text-pine" />
-              <h2 className="text-lg font-black text-ink">MVP Readiness</h2>
-            </div>
-            <div className="mt-4 grid gap-3">
-              {["CRM-only app routing", "Protected dashboard route", "Sales, Applications, HR, Billing connected", "Accounting, Reports, Settings shell completed"].map((item) => (
-                <p key={item} className="rounded-[8px] bg-mint px-4 py-3 text-sm font-bold text-pine">{item}</p>
               ))}
             </div>
           </section>
