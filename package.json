@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "concurrently -k -n frontend,backend \"npm:dev:frontend\" \"npm:dev:backend\"",
     "dev:frontend": "vite --host 127.0.0.1",
-    "dev:backend": "npm run dev --prefix backend",
-    "seed": "npm run seed --prefix backend",
-    "test": "npm run test --prefix backend",
+    "dev:backend": "node backend/src/server.js",
+    "seed": "node backend/src/scripts/seed.js",
+    "test": "node --test backend/src/tests/*.test.js",
     "build": "vite build",
     "preview": "vite preview"
   },

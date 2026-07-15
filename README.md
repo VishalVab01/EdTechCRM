@@ -115,7 +115,7 @@ npm install
 Install backend dependencies:
 
 ```bash
-npm install --prefix backend
+npm install
 ```
 
 ## Environment Variables
@@ -209,7 +209,7 @@ Change these values in `backend/.env` before production use. Logout clears the l
 Seed an admin user and sample CRM records:
 
 ```bash
-npm run seed --prefix backend
+npm run seed
 ```
 
 ## Frontend Routes
@@ -388,7 +388,7 @@ These models support the dashboard modules and reporting views.
 After making changes, run:
 
 ```bash
-npm run test --prefix backend
+npm run test
 npm run build
 ```
 
