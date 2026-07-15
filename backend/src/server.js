@@ -60,9 +60,20 @@ app.use((error, req, res, next) => {
   res.status(500).json({ message: "Server error" });
 });
 
-await connectDB();
-await ensureDefaultAdmin();
+let bootstrapped = false;
 
-app.listen(port, () => {
-  console.log(`API server running on http://127.0.0.1:${port}`);
-});
+export async function bootstrap() {
+  if (bootstrapped) return;
+  const connected = await connectDB();
+  if (connected) await ensureDefaultAdmin();
+  bootstrapped = true;
+}
+
+if (!process.env.VERCEL) {
+  await bootstrap();
+  app.listen(port, () => {
+    console.log(`API server running on http://127.0.0.1:${port}`);
+  });
+}
+
+export default app;

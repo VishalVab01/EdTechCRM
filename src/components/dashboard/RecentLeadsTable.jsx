@@ -20,7 +20,7 @@ export default function RecentLeadsTable() {
               <th className="px-5 py-3">Course</th>
               <th className="px-5 py-3">Source</th>
               <th className="px-5 py-3">Owner</th>
-              <th className="px-5 py-3">Stage</th>
+              <th className="px-5 py-3 min-w-[140px]">Stage</th>
               <th className="px-5 py-3">Score</th>
             </tr>
           </thead>
@@ -34,8 +34,8 @@ export default function RecentLeadsTable() {
                 <td className="px-5 py-4 text-sm font-medium text-muted">{lead.course}</td>
                 <td className="px-5 py-4 text-sm font-medium text-muted">{lead.source}</td>
                 <td className="px-5 py-4 text-sm font-bold text-ink">{lead.owner}</td>
-                <td className="px-5 py-4">
-                  <span className="rounded-full bg-mint px-3 py-1 text-xs font-black text-pine">{lead.stage}</span>
+                <td className="px-5 py-4 min-w-[140px]">
+                  <span className="inline-flex whitespace-nowrap rounded-full bg-mint px-3 py-1 text-xs font-black text-pine">{lead.stage}</span>
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-2">
