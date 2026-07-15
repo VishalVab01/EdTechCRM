@@ -43,6 +43,14 @@ app.use("/api/invoices", invoiceRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/search", searchRoutes);
 
+app.use("/auth", authRoutes);
+app.use("/leads", leadRoutes);
+app.use("/applications", applicationRoutes);
+app.use("/candidates", candidateRoutes);
+app.use("/invoices", invoiceRoutes);
+app.use("/settings", settingsRoutes);
+app.use("/search", searchRoutes);
+
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
